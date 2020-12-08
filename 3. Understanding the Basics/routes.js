@@ -1,5 +1,4 @@
 const fs = require('fs');
-const { request } = require('http');
 
 const requestHandler = (req, res) => {
     const url = req.url;
@@ -41,7 +40,15 @@ const requestHandler = (req, res) => {
     res.end();
 };
 
-module.exports = {
-    handler: requestHandler,
-    someText: 'Some hard coded text'
-};
+// module.exports = requestHandler;
+
+// module.exports = {
+//     handler: requestHandler,
+//     someText: 'Some hard coded text'
+// };
+
+// module.exports.handler = requestHandler;
+// module.exports.someText = 'Some hard coded text';
+
+exports.handler = requestHandler;
+exports.someText = 'Some hard coded text';
