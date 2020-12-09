@@ -8,37 +8,52 @@ const siteHandler = (req, res) => {
         res.setHeader('Content-Type', 'text/html');
         res.write(`<html>
             <head>
-                <title>Home</title>
+                <title>Home (Assignment 1)</title>
             </head>
             <body>
-                <h1>Welcome to this site!</h1>
                 <form action="/create-user" method="POST">
                     <input type="text" name="username">
-                    <button>Send</button>
+                    <button type="submit">Send</button>
                 </form>
             </body>
         </html>`);
-        res.end();
-    };
-    if (url === '/users') {
-        res.setHeader('Content-Type', 'text/html');
-        res.write(`<html>
-            <head>
-                <title>User list</title>
-            </head>
-            <body>
-                <ul>
-                    <li>User 1</li>
-                    <li>User 2</li>
-                </ul>
-            </body>
-        </html>`);
-        res.end();
-    };
-    if (url === '/create-user' && method === 'POST') {
-        res.statusCode = 302;
-        res.setHeader('Location', '/');
         return res.end();
+    };
+
+    if (url === '/users') {
+        fs.readFile('users.txt', 'utf8', (err, data) => {
+            if (err) throw err;
+            const users = data.split('\n');
+            
+            res.setHeader('Content-Type', 'text/html');
+            res.write(`<html>
+                <head>
+                <title>Users (Assignment 1)</title>
+                </head>
+                <body><ul>`);
+            for (let i=0; i<users.length-1; i++) {
+                res.write(`<li>${users[i]}</li>`);
+            }
+            res.write(`</ul></body></html>`);
+            return res.end();
+        });
+    };
+
+    if (url === '/create-user' && method === 'POST') {
+        const body = [];
+        req.on('data', chunk => body.push(chunk));
+        req.on('end', () => {
+            const parsedBody = Buffer.concat(body).toString();
+            const username = parsedBody.split('=')[1];
+
+            const textFile = fs.createWriteStream('users.txt', { flags: 'a' });
+            textFile.write(`${username}\n`);
+            textFile.end();
+            // fs.writeFileSync('user.txt', username);
+            res.statusCode = 302;
+            res.setHeader('Location', '/');
+            res.end();
+        });
     };
 };
 
