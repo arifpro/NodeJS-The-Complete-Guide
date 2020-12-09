@@ -1,7 +1,3 @@
-// default
-const http = require('http');
-
-// 3rd party
 const express = require('express');
 
 const app = express();
@@ -16,6 +12,4 @@ app.use((req, res, next) => {
     res.send('<h1>Hello! from express!</h1>');
 });
 
-const server = http.createServer(app);
-
-server.listen(1234);
+app.listen(1234);
