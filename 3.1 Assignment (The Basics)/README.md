@@ -1,4 +1,4 @@
-# Assignment
+# Assignment 1 (Basics)
 
 1. Spin up a Node.js-driven Server (on port 3000)
 2. Handle two Routes: "/" and "/users"
